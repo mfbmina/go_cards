@@ -7,5 +7,7 @@ func main() {
 
   hand.print()
   remainingDeck.saveToFile("test.txt")
-  remainingDeck.print()
+
+  newDeck := deckFromFile("test.txt")
+  newDeck.print()
 }

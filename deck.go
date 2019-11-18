@@ -4,6 +4,7 @@ import (
   "fmt"
   "io/ioutil"
   "strings"
+  "os"
 )
 
 type deck []string
@@ -40,9 +41,22 @@ func (d deck) toString() string {
   return strings.Join(d, "\n")
 }
 
-func (d deck) saveToFile(filename string) error{
+func (d deck) saveToFile(filename string) error {
   cardsString := d.toString()
   message := []byte(cardsString)
 
   return ioutil.WriteFile(filename, message, 0666)
+}
+
+func deckFromFile(filename string) deck {
+  bs, err := ioutil.ReadFile(filename)
+
+  if err != nil {
+    fmt.Println(err)
+    os.Exit(1)
+  }
+
+  cards := strings.Split(string(bs), "\n")
+
+  return deck(cards)
 }
