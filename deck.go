@@ -3,7 +3,9 @@ package main
 import (
   "fmt"
   "io/ioutil"
+  "math/rand"
   "strings"
+  "time"
   "os"
 )
 
@@ -24,17 +26,17 @@ func newDeck() deck {
   return cards
 }
 
-func (d deck) print() {
-  for _, card := range d {
-    fmt.Println(card)
-  }
-}
-
 func deal(d deck, amount int) (deck, deck) {
   hand := d[:amount]
   cards := d[amount:]
 
   return hand, cards
+}
+
+func (d deck) print() {
+  for _, card := range d {
+    fmt.Println(card)
+  }
 }
 
 func (d deck) toString() string {
@@ -59,4 +61,14 @@ func deckFromFile(filename string) deck {
   cards := strings.Split(string(bs), "\n")
 
   return deck(cards)
+}
+
+func (d deck) shuffle() {
+  source := rand.NewSource(time.Now().UnixNano())
+  r := rand.New(source)
+
+  for i := range d {
+    ni := r.Intn(len(d) - 1)
+    d[i], d[ni] = d[ni], d[i]
+  }
 }
